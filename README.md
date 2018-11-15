@@ -1,0 +1,1 @@
+<body>This is my attempt at creating a Reddit bot that will translate comments when called on. (It is also an attempt to better learn the Git workflow, and gain programming experience).</body>
