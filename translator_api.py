@@ -6,7 +6,7 @@ TODO
 - Open new Reddit account, get it karma so you can test it out, and integrate with PRAW.
 """
 import requests
-from yandex_key import *  # Contains my API key for Yandex translations.
+from keys import *  # Contains my API key for Yandex translations.
 import urllib.parse
 
 translateurl = "https://translate.yandex.net/api/v1.5/tr.json/translate?key={}&options=1&".format(yandexkey)
