@@ -62,7 +62,7 @@ def translate(text: str, lang: str) -> str:
 #{'code': 200, 'detected': {'lang': 'en'}, 'lang': 'en-fr', 'text': ['Ceci est un test']}
 
 
-
-print(translate("This is a test", "fr"))
+if __name__ == "__main__":
+    print(translate("This is a test", "fr"))
 
 
