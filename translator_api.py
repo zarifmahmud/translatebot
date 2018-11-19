@@ -56,7 +56,10 @@ def translate(text: str, lang: str) -> str:
     output_dict = r.json()  # Returns dictionary with translated text, and otheri info.
     langdetected = longhand(output_dict["detected"]["lang"])
     translation = output_dict["text"][0]
-    retstr = "Language Detected: {} \nTranslation: {} \nPowered by Yandex Translate".format(langdetected, translation)
+    retstr = "Language Detected: {} \n \nTranslation: {} " \
+             "\n\nPowered by Yandex Translate".format(langdetected, translation)
+
+
     return retstr
 
 #{'code': 200, 'detected': {'lang': 'en'}, 'lang': 'en-fr', 'text': ['Ceci est un test']}

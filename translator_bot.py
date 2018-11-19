@@ -26,9 +26,12 @@ for unread in praw.models.util.stream_generator(reddit.inbox.unread):
     # This creates a generator that continuously returns unread messages in my inbox.
     print(unread)
     print(unread.body)
+    # unread.mark_read()
     if "translate-this" in unread.body and not unread.is_root:
-            unread.reply("You aren't a root")
-    else:
-        unread.reply("You are a root")
+        translation = translate(unread.parent().body, 'en')
+        unread.reply(translation)
+
+    # else:
+    #     unread.reply("You are a root")
 
 
