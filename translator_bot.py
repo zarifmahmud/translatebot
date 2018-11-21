@@ -22,16 +22,33 @@ reddit = praw.Reddit('bot1',
 #     if "translate-this" in comment.lower():
 #         comment.reply("I see this")
 
-for unread in praw.models.util.stream_generator(reddit.inbox.unread):
-    # This creates a generator that continuously returns unread messages in my inbox.
-    print(unread)
-    print(unread.body)
-    unread.mark_read()
-    if "translate-this" in unread.body and not unread.is_root:
-        translation = translate(unread.parent().body, 'en')
-        unread.reply(translation)
+def karma_check(username) -> bool:
+    """
+    Checks if a given user has enough link and comment karma.
+    """
+    user = reddit.redditor(username)
+    return user.link_karma > 10 and user.comment_karma > 350
+
+
+def run_bot():
+    """
+    This is the function that runs the Reddit bot. It creates a generator that continuously returns unread messages
+    to the bot's inbox, checks if "translate-this" is mentioned in the message (like in /u/translate-this), if the
+    comment isn't a top-level comment, and if the user has enough karma to call the bot.
+    """
+    for unread in praw.models.util.stream_generator(reddit.inbox.unread):
+        print(unread)
+        print(unread.body)
+        print(unread.author)
+        unread.mark_read()
+        if "translate-this" in unread.body and not unread.is_root and karma_check(str(unread.author)):
+            translation = translate(unread.parent().body, 'en')
+            unread.reply(translation)
 
     # else:
     #     unread.reply("You are a root")
 
+# user = reddit.redditor("GrassNova")
+# print(user.comment_karma)
 
+run_bot()
