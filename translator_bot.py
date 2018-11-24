@@ -13,14 +13,9 @@ import schedule
 from translator_api import *
 import time
 
-
-
 reddit = praw.Reddit('bot1',
                      user_agent='Windows:translationbot:v0 (by /u/translate-this)')
 
-# for comment in reddit.subreddit('all').stream.comments():
-#     if "translate-this" in comment.lower():
-#         comment.reply("I see this")
 
 def karma_check(username) -> bool:
     """
@@ -45,10 +40,8 @@ def run_bot():
             translation = translate(unread.parent().body, 'en')
             unread.reply(translation)
 
-    # else:
-    #     unread.reply("You are a root")
 
-# user = reddit.redditor("GrassNova")
+# user = reddit.redditor("translate-bot")
 # print(user.comment_karma)
 
 run_bot()

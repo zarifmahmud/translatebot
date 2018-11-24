@@ -48,19 +48,20 @@ def longhand(abbrev: str) -> str:
 
 def translate(text: str, lang: str) -> str:
     """
-    The actual translation
+    The actual translation. We process the completed URL, fish out the detected language and translation, and return
+    the formatted information.
     """
 
     yanurl = translation_params(text, lang)
     r = requests.get(yanurl)
-    output_dict = r.json()  # Returns dictionary with translated text, and otheri info.
+    output_dict = r.json()  # Returns dictionary with translated text, and other info.
     langdetected = longhand(output_dict["detected"]["lang"])
     translation = output_dict["text"][0]
     retstr = 'Language Detected: {} \n \nTranslation: \n\n "{}" \n\n[Powered ' \
              'by Yandex.Translate](http://translate.yandex.com/)'.format(langdetected, translation)
     return retstr
 
-#{'code': 200, 'detected': {'lang': 'en'}, 'lang': 'en-fr', 'text': ['Ceci est un test']}
+# {'code': 200, 'detected': {'lang': 'en'}, 'lang': 'en-fr', 'text': ['Ceci est un test']}
 
 
 if __name__ == "__main__":
