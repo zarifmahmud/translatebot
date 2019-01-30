@@ -12,6 +12,7 @@ import praw
 import schedule
 from translator_api import *
 import time
+import re
 
 reddit = praw.Reddit('bot1',
                      user_agent='Windows:translationbot:v0 (by /u/translate-this)')
@@ -25,6 +26,7 @@ def karma_check(username) -> bool:
     return user.link_karma > 10 and user.comment_karma > 350
 
 
+
 def run_bot():
     """
     This is the function that runs the Reddit bot. It creates a generator that continuously returns unread messages
@@ -36,9 +38,15 @@ def run_bot():
         print(unread.body)
         print(unread.author)
         unread.mark_read()
-        if "translate-this" in unread.body and not unread.is_root and karma_check(str(unread.author)):
+        if "translate-back" in unread.body and not unread.is_root and karma_check(str(unread.author)):
+            lang_detected = re.search(r'<.+>', unread.body).group(0).lstrip('<').rstrip('>')
+            print(lang_detected)
+            translation = translate(unread.parent().body, lang_detected)
+            unread.reply(translation)
+        elif "translate-this" in unread.body and not unread.is_root and karma_check(str(unread.author)):
             translation = translate(unread.parent().body, 'en')
             unread.reply(translation)
+
 
 
 # user = reddit.redditor("translate-bot")
