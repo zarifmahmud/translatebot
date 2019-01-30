@@ -7,6 +7,9 @@ Python parses it as if we're trying to find "translate-this" str both in unread,
 which obviously won't work, as unread.is_root is a bool. But this works
 if "translate-this" in unread.body and not unread.is_root:
 I guess the 'not' helps Python parse it better
+
+TODO
+-Implement author check (prevent people from using it too much)
 """
 import praw
 import schedule
@@ -16,6 +19,8 @@ import re
 
 reddit = praw.Reddit('bot1',
                      user_agent='Windows:translationbot:v0 (by /u/translate-this)')
+
+user_dict = {}
 
 
 def karma_check(username) -> bool:
@@ -38,14 +43,18 @@ def run_bot():
         print(unread.body)
         print(unread.author)
         unread.mark_read()
-        if "translate-back" in unread.body and not unread.is_root and karma_check(str(unread.author)):
-            lang_detected = re.search(r'<.+>', unread.body).group(0).lstrip('<').rstrip('>')
-            print(lang_detected)
-            translation = translate(unread.parent().body, lang_detected)
+        if "translate-this" in unread.body and not unread.is_root and karma_check(str(unread.author)):
+            if "translate-back" in unread.body:
+                lang_detected = re.search(r'<.+>', unread.body).group(0).lstrip('<').rstrip('>')
+                print(lang_detected)
+                translation = translate(unread.parent().body, lang_detected)
+            else:
+                translation = translate(unread.parent().body, 'en')
             unread.reply(translation)
-        elif "translate-this" in unread.body and not unread.is_root and karma_check(str(unread.author)):
-            translation = translate(unread.parent().body, 'en')
-            unread.reply(translation)
+            if unread.author in user_dict:
+                user_dict[unread.author] += 1
+            else:
+                user_dict[unread.author] = 1
 
 
 
